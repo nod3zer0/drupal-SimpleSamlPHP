@@ -1,0 +1,43 @@
+# Drupal Digital Campus
+# author: René Češka <xceska06@stud.fit.vutbr.cz>
+# inspired by: https://hub.docker.com/_/drupal
+# inspired by: https://github.com/sameersbn/docker-memcached
+#
+# Access via "http://localhost:8080"
+#   (or "http://$(docker-machine ip):8080" if using docker-machine)
+#
+# During initial Drupal setup,
+# Database type: PostgreSQL
+# Database name: postgres
+# Database username: postgres
+# Database password: example
+# ADVANCED OPTIONS; Database host: postgres
+
+version: '3.1'
+
+services:
+
+  drupal:
+    build:
+       context: .
+       dockerfile: ./drupal_memcache/Dockerfile
+    ports:
+      - 8080:80
+    volumes:
+      - /var/www/html/modules
+      - /var/www/html/profiles
+      - /var/www/html/themes
+      - /var/www/html/sites
+    restart: always
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: example
+    restart: always
+    
+  Memcached:
+    image: sameersbn/memcached:1.5.6-2
+    ports:
+     - "11211:11211"
+    restart: always
